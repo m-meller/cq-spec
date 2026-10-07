@@ -34,6 +34,10 @@ struct exec {
 
 | Member | Datatype | Notes |
 | ------ | -------- | ----- |
+| id | `size_t` | Unique identifier for the executon handle. |
+| init | `bool` | Flag indicating whether the execution handle was successfully initialised. |
 | complete | `bool` | Flag indicating whether the execution has fully completed or not. Access to the executors result buffer is not guaranteed to be safe until this is `TRUE`. |
+| halt | `bool` | Flag indicating whether the execution has halted. |
 | qdev_status | `unsigned int` | Device status code, usage dependent on hardware vendor. Could be used to indicate a fault preventing further execution. |
-| completed_shots | `size_t` | A count of shots that have been completed, most relevant to mult-shot executions. Synchronisation is implementation dependent, but _must_ always be accurate when `complete` is `TRUE`. |
+| completed_shots | `size_t` | A count of shots that have been completed, most relevant to multi-shot executions. Synchronisation is implementation dependent, but _must_ always be accurate when `complete` is `TRUE`. |
+| expected_shots | `size_t` | An expected count of shots if the execution has fully completed. |
