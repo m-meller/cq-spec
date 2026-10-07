@@ -50,20 +50,20 @@ int free_qureg(qubit ** qrp);
 ### Allocate execution handle
 
 ```C
-int alloc_exec(exec ** ehp);
+int alloc_exec(struct exec ** ehp);
 ```
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `ehp`     | `exec **`| Out | On return of this funciton the memory location pointed to by `ehp` should contain a valid `exec` handle. |
+| `ehp`     | `struct exec **`| Out | On return of this funciton the memory location pointed to by `ehp` should contain a valid `exec` handle. |
 
 ### Deallocate execution handle
 
 ```C
-int free_exec(exec ** ehp);
+int free_exec(struct exec ** ehp);
 ```
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `ehp`     | `exec **`| Out | On return of this funciton the memory location pointed to by `ehp` should _not_ contain a valid `exec` handle. |
+| `ehp`     | `struct exec **`| Out | On return of this funciton the memory location pointed to by `ehp` should _not_ contain a valid `exec` handle. |
 
 ### Register quantum kernel 
 
@@ -95,59 +95,59 @@ Given that the execution handle is defined as an opaque type, we provide a minim
 
 ### Get the identifier of execution handle
 ```C
-size_t exec_id(exec * eh);
+size_t exec_id(struct exec * const eh);
 ```
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `eh`  | `exec *`  | In     | Pointer to execution handle from which to fetch data. |
+| `eh`  | `struct exec * const`  | In     | Pointer to execution handle from which to fetch data. |
 
 ### Check if execution handle is initialised
 ```C
-bool exec_is_init(exec * eh);
+bool exec_is_init(struct exec * const eh);
 ```
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `eh`  | `exec *`  | In     | Pointer to execution handle from which to fetch data. |
+| `eh`  | `struct exec * const`  | In     | Pointer to execution handle from which to fetch data. |
 
 ### Check if execution was completed.
 ```C
-bool exec_completed(exec * eh);
+bool exec_completed(struct exec * const eh);
 ```
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `eh`  | `exec *`  | In     | Pointer to execution handle from which to fetch data. |
+| `eh`  | `struct exec * const`  | In     | Pointer to execution handle from which to fetch data. |
 
 ### Check if the execution was halted. 
 ```C
-bool exec_halted(exec * eh);
+bool exec_halted(struct exec * const eh);
 ```
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `eh`  | `exec *`  | In     | Pointer to execution handle from which to fetch data. |
+| `eh`  | `struct exec * const`  | In     | Pointer to execution handle from which to fetch data. |
 
 ### Check the current status of the execution.
 ```C
-int exec_status(exec * eh);
+int exec_status(struct exec * const eh);
 ```
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `eh`  | `exec *`  | In     | Pointer to execution handle from which to fetch data. |
+| `eh`  | `struct exec * const`  | In     | Pointer to execution handle from which to fetch data. |
 
 ### Check number of completed shots.
 ```C
-size_t exec_completed_shots(exec * eh);
+size_t exec_completed_shots(struct exec * const eh);
 ```
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `eh`  | `exec *`  | In     | Pointer to execution handle from which to fetch data. |
+| `eh`  | `struct exec * const`  | In     | Pointer to execution handle from which to fetch data. |
 
 ### Check number of expected shots.
 ```C
-size_t exec_expected_shots(exec * eh);
+size_t exec_expected_shots(struct exec * const eh);
 ```
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `eh`  | `exec *`  | In     | Pointer to execution handle from which to fetch data. |
+| `eh`  | `struct exec * const`  | In     | Pointer to execution handle from which to fetch data. |
 
 ## Executors
 
