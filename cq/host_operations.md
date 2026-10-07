@@ -69,7 +69,7 @@ int register_pqkern(pqkern pkernel);
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `pkernel`  | `pqkern`  | In     | Should point to a valid parameterised quantum kernel. Quantum kernels should _only_ contain quantum operations. The paramaterised quantum kernel should accept a `struct qkern_parameters` as an argument. |
+| `pkernel`  | `pqkern`  | In     | Should point to a valid parameterised quantum kernel. Quantum kernels should _only_ contain quantum operations. The paramaterised quantum kernel should accept a `void *` as an argument. |
 
 
 
@@ -215,13 +215,14 @@ int amb_qrun(qkern kernel, qubit * qrp, const size_t NQUBITS, cstate * const crp
 ### Synchronous one-shot parameterised execution on default backend
 
 ```C
-int sp_qrun(pqkern kernel, struct qkern_parameters * kernpar, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE);
+int sp_qrun(pqkern kernel, void * kernpar, const size_t KERNPAR_SIZE, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
 | `kernel`  | `pqkern` | In | A function pointer to the parameterised quantum kernel to be executed. |
-| `kernpar` | `struct qkern_parameters *` | In | A struct containing the parameters to be passed to the parameterised kernel. |
+| `kernpar` | `void *` | In | A typeless pointer to the arbitrary parameters to be passed to the parameterised kernel. |
+| `KERNPAR_SIZE` | `const size_t` | In | The size of `kernpar` in bytes. |
 | `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
 | `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the kernel. Array size should match `NMEASURE`. |
@@ -230,13 +231,14 @@ int sp_qrun(pqkern kernel, struct qkern_parameters * kernpar, qubit * qrp, const
 ### Asynchronous one-shot parameterised execution on default backend
 
 ```C
-int ap_qrun(pqkern kernel, struct qkern_parameters * kernpar, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, struct exec * const ehp);
+int ap_qrun(pqkern kernel, void * kernpar, const size_t KERNPAR_SIZE, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
 | `kernel`  | `pqkern`  | In | A function pointer to the parameterised quantum kernel to be executed. |
-| `kernpar` | `struct qkern_parameters *` | In | A struct containing the parameters to be passed to the parameterised kernel. |
+| `kernpar` | `void *` | In | A typeless pointer to the arbitrary parameters to be passed to the parameterised kernel. |
+| `KERNPAR_SIZE` | `const size_t` | In | The size of `kernpar` in bytes. |
 | `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
 | `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the kernel. Array size should match `NMEASURE`. |
@@ -246,13 +248,14 @@ int ap_qrun(pqkern kernel, struct qkern_parameters * kernpar, qubit * qrp, const
 ### Synchronous multi-shot parameterised execution on default backend
 
 ```C
-int smp_qrun(pqkern kernel, struct qkern_parameters * kernpar, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS);
+int smp_qrun(pqkern kernel, void * kernpar, const size_t KERNPAR_SIZE, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
 | `kernel`  | `pqkern`  | In | A function pointer to the parameterised quantum kernel to be executed. |
-| `kernpar` | `struct qkern_parameters *` | In | A struct containing the parameters to be passed to the parameterised kernel. |
+| `kernpar` | `void *` | In | A typeless pointer to the arbitrary parameters to be passed to the parameterised kernel. |
+| `KERNPAR_SIZE` | `const size_t` | In | The size of `kernpar` in bytes. |
 | `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
 | `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the kernel. Array size should match `NMEASURE * NSHOTS`. |
@@ -262,13 +265,14 @@ int smp_qrun(pqkern kernel, struct qkern_parameters * kernpar, qubit * qrp, cons
 ### Asynchronous multi-shot parameterised execution on default backend
 
 ```C
-int amp_qrun(pqkern kernel, struct qkern_parameters * kernpar, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, struct exec * const ehp);
+int amp_qrun(pqkern kernel, void * kernpar, const size_t KERNPAR_SIZE, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
 | `kernel`  | `pqkern`  | In | A function pointer to the parameterised quantum kernel to be executed. |
-| `kernpar` | `struct qkern_parameters *` | In | A struct containing the parameters to be passed to the parameterised kernel. |
+| `kernpar` | `void *` | In | A typeless pointer to the arbitrary parameters to be passed to the parameterised kernel. |
+| `KERNPAR_SIZE` | `const size_t` | In | The size of `kernpar` in bytes. |
 | `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
 | `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the kernel. Array size should match `NMEASURE * NSHOTS`. |
@@ -279,13 +283,14 @@ int amp_qrun(pqkern kernel, struct qkern_parameters * kernpar, qubit * qrp, cons
 ### Synchronous one-shot parameterised execution on specified backend
 
 ```C
-int sbp_qrun(pqkern kernel, struct qkern_parameters * kernpar, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const backend_id BE);
+int sbp_qrun(pqkern kernel, void * kernpar, const size_t KERNPAR_SIZE, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const backend_id BE);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
 | `kernel`  | `pqkern`  | In | A function pointer to the parameterised quantum kernel to be executed. |
-| `kernpar` | `struct qkern_parameters *` | In | A struct containing the parameters to be passed to the parameterised kernel. |
+| `kernpar` | `void *` | In | A typeless pointer to the arbitrary parameters to be passed to the parameterised kernel. |
+| `KERNPAR_SIZE` | `const size_t` | In | The size of `kernpar` in bytes. |
 | `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
 | `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the kernel. Array size should match `NMEASURE`. |
@@ -295,13 +300,14 @@ int sbp_qrun(pqkern kernel, struct qkern_parameters * kernpar, qubit * qrp, cons
 ### Asynchronous one-shot parameterised execution on specified backend
 
 ```C
-int abp_qrun(pqkern kernel, struct qkern_parameters * kernpar, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const backend_id BE, struct exec * const ehp);
+int abp_qrun(pqkern kernel, void * kernpar, const size_t KERNPAR_SIZE, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const backend_id BE, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
 | `kernel`  | `pqkern`  | In | A function pointer to the parameterised quantum kernel to be executed. |
-| `kernpar` | `struct qkern_parameters *` | In | A struct containing the parameters to be passed to the parameterised kernel. |
+| `kernpar` | `void *` | In | A typeless pointer to the arbitrary parameters to be passed to the parameterised kernel. |
+| `KERNPAR_SIZE` | `const size_t` | In | The size of `kernpar` in bytes. |
 | `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
 | `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the kernel. Array size should match `NMEASURE`. |
@@ -312,13 +318,14 @@ int abp_qrun(pqkern kernel, struct qkern_parameters * kernpar, qubit * qrp, cons
 ### Synchronous multi-shot parameterised execution on specified backend
 
 ```C
-int smbp_qrun(pqkern kernel, struct qkern_parameters * kernpar, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE);
+int smbp_qrun(pqkern kernel, void * kernpar, const size_t KERNPAR_SIZE, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
 | `kernel`  | `pqkern`  | In | A function pointer to parameterised the quantum kernel to be executed. |
-| `kernpar` | `struct qkern_parameters *` | In | A struct containing the parameters to be passed to the parameterised kernel. |
+| `kernpar` | `void *` | In | A typeless pointer to the arbitrary parameters to be passed to the parameterised kernel. |
+| `KERNPAR_SIZE` | `const size_t` | In | The size of `kernpar` in bytes. |
 | `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
 | `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the kernel. Array size should match `NMEASURE * NSHOTS`. |
@@ -330,13 +337,14 @@ int smbp_qrun(pqkern kernel, struct qkern_parameters * kernpar, qubit * qrp, con
 ### Asynchronous multi-shot parameterised execution on specified backend
 
 ```C
-int ambp_qrun(pqkern kernel, struct qkern_parameters * kernpar, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE, struct exec * const ehp);
+int ambp_qrun(pqkern kernel, void * kernpar, const size_t KERNPAR_SIZE, qubit * qrp, const size_t NQUBITS, cstate * const crp, const size_t NMEASURE, const size_t NSHOTS, const backend_id BE, struct exec * const ehp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
 | `kernel`  | `pqkern`  | In | A function pointer to the parameterised quantum kernel to be executed. |
-| `kernpar` | `struct qkern_parameters *` | In | A struct containing the parameters to be passed to the parameterised kernel. |
+| `kernpar` | `void *` | In | A typeless pointer to the arbitrary parameters to be passed to the parameterised kernel. |
+| `KERNPAR_SIZE` | `const size_t` | In | The size of `kernpar` in bytes. |
 | `qrp`     | `qubit *`| In | Pointer to the register of qubits the kernel will act upon. |
 | `NQUBITS` | `const size_t` | In | The size of `qrp`. Highest qubit index is `NQUBITS`-1. |
 | `crp` | `cstate * const` | Out | A constant pointer to a cstate array in which to store the outcome of the kernel. Array size should match `NMEASURE * NSHOTS`. |
