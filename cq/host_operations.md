@@ -9,43 +9,61 @@ Operations which manage resources which are shared between host and device.
 ### Allocate qubit
 
 ```C
-int alloc_qubit(qubit * qhp);
+int alloc_qubit(qubit ** qhp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `qhp`      | `qubit *` | Out | On return of this function the memory location pointed to by `qp` should contain a valid and unique `qubit` handle.
+| `qhp`      | `qubit **` | Out | On return of this function the memory location pointed to by `qhp` should contain a valid and unique `qubit` handle.
 
 ### Deallocate qubit
 
 ```C
-int free_qubit(qubit * qhp);
+int free_qubit(qubit ** qhp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `qhp`      | `qubit *` | Out | On return of this function the memory location pointed to by `qp` should _not_ contain a valid `qubit` handle. |
+| `qhp`      | `qubit **` | Out | On return of this function the memory location pointed to by `qhp` should _not_ contain a valid `qubit` handle. |
 
 ### Allocate qubit register
 
 ```C
-int alloc_qureg(qubit * qrp, size_t N);
+int alloc_qureg(qubit ** qrp, size_t N);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `qrp`     | `qubit *`| Out    | On return of this function the memory location pointed to by `qrp` should contain _N_ valid `qubit` handles in an array. |
+| `qrp`     | `qubit **`| Out    | On return of this function the memory location pointed to by `qrp` should contain _N_ valid `qubit` handles in an array. |
 | `N`       | `size_t` | In     | This function should allocate valid and unique handles for `N` qubits. |
 
 ### Deallocate qubit register
 
 ```C
-int free_qureg(qubit * qrp);
+int free_qureg(qubit ** qrp);
 ```
 
 | Parameter | Datatype | In/Out | Notes |
 | --------- | -------- | ------ | ----- |
-| `qrp`     | `qubit *` | Out | On return of this function the memory location pointed to by `qrp` should not contain any valid qubit handles, and any held resources should have been released.
+| `qrp`     | `qubit **` | Out | On return of this function the memory location pointed to by `qrp` should _not_ contain any valid qubit handles, and any held resources should have been released.
+
+### Allocate execution handle
+
+```C
+int alloc_exec(exec ** ehp);
+```
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `ehp`     | `exec **`| Out | On return of this funciton the memory location pointed to by `ehp` should contain a valid `exec` handle. |
+
+### Deallocate execution handle
+
+```C
+int free_exec(exec ** ehp);
+```
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `ehp`     | `exec **`| Out | On return of this funciton the memory location pointed to by `ehp` should _not_ contain a valid `exec` handle. |
 
 ### Register quantum kernel 
 
@@ -71,7 +89,65 @@ int register_pqkern(pqkern pkernel);
 | --------- | -------- | ------ | ----- |
 | `pkernel`  | `pqkern`  | In     | Should point to a valid parameterised quantum kernel. Quantum kernels should _only_ contain quantum operations. The paramaterised quantum kernel should accept a `void *` as an argument. |
 
+## Execution handle getters
 
+Given that the execution handle is defined as an opaque type, we provide a minimal interface for accessing data crucial to CQ.
+
+### Get the identifier of execution handle
+```C
+size_t exec_id(exec * eh);
+```
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `eh`  | `exec *`  | In     | Pointer to execution handle from which to fetch data. |
+
+### Check if execution handle is initialised
+```C
+bool exec_is_init(exec * eh);
+```
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `eh`  | `exec *`  | In     | Pointer to execution handle from which to fetch data. |
+
+### Check if execution was completed.
+```C
+bool exec_completed(exec * eh);
+```
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `eh`  | `exec *`  | In     | Pointer to execution handle from which to fetch data. |
+
+### Check if the execution was halted. 
+```C
+bool exec_halted(exec * eh);
+```
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `eh`  | `exec *`  | In     | Pointer to execution handle from which to fetch data. |
+
+### Check the current status of the execution.
+```C
+int exec_status(exec * eh);
+```
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `eh`  | `exec *`  | In     | Pointer to execution handle from which to fetch data. |
+
+### Check number of completed shots.
+```C
+size_t exec_completed_shots(exec * eh);
+```
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `eh`  | `exec *`  | In     | Pointer to execution handle from which to fetch data. |
+
+### Check number of expected shots.
+```C
+size_t exec_expected_shots(exec * eh);
+```
+| Parameter | Datatype | In/Out | Notes |
+| --------- | -------- | ------ | ----- |
+| `eh`  | `exec *`  | In     | Pointer to execution handle from which to fetch data. |
 
 ## Executors
 
@@ -352,7 +428,6 @@ int ambp_qrun(pqkern kernel, void * kernpar, const size_t KERNPAR_SIZE, qubit * 
 | `NSHOTS` | `const size_t` | In | The total number of repetitions of the kernel to be executed. |
 | `BE` | `const backend_id` | In | Identifier for a specific **quantum** backend. |
 | `ehp` | `struct exec * const` | Out | A pointer to a CQ execution handle. This handle can be used to ensure the kernel has been executed on the **quantum** device, and the measurement outcome returned to the host. |
-
 
 ## Synchronisation
 
